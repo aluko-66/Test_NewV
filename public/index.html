@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Velora — Order Dashboard</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: monospace; background: #0f0f0f; color: #e0e0e0; padding: 2rem; }
+    h1 { font-size: 1.4rem; margin-bottom: 1.5rem; color: #7effa0; }
+    button { background: #1e1e1e; color: #7effa0; border: 1px solid #7effa0; padding: .4rem .9rem; cursor: pointer; font-family: monospace; margin-right: .5rem; }
+    button:hover { background: #7effa0; color: #0f0f0f; }
+    #output { margin-top: 1.5rem; background: #1a1a1a; border: 1px solid #333; padding: 1rem; white-space: pre-wrap; font-size: .85rem; min-height: 200px; }
+    .err { color: #ff6b6b; }
+  </style>
+</head>
+<body>
+  <h1>🛠 Velora Debug Dashboard</h1>
+  <div>
+    <button onclick="call('/api/orders')">GET /api/orders</button>
+    <button onclick="call('/api/orders/1')">GET /api/orders/1</button>
+    <button onclick="call('/api/orders/2')">GET /api/orders/2 (buggy)</button>
+    <button onclick="call('/api/stats')">GET /api/stats</button>
+    <button onclick="createOrder()">POST /api/orders</button>
+  </div>
+  <div id="output">Click a button to call the API…</div>
+
+  <script>
+    const out = document.getElementById("output");
+    async function call(url, opts) {
+      out.className = "";
+      out.textContent = `→ ${opts?.method || "GET"} ${url}\n\n`;
+      try {
+        const res = await fetch(url, opts);
+        const data = await res.json();
+        if (!res.ok) out.className = "err";
+        out.textContent += JSON.stringify(data, null, 2);
+      } catch (e) {
+        out.className = "err";
+        out.textContent += "Network error: " + e.message;
+      }
+    }
+    function createOrder() {
+      call("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ customer_id: 1, product: "Test Widget", quantity: 2, total_price: 49.98 })
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "velora-debug-exercise",
+  "version": "1.0.0",
+  "description": "TSE Interview - Practical Debugging Exercise",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "seed": "node db/seed.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.10.0",
+    "express": "^4.18.2"
+  },
+  "note": "Requires Node 18+. Run 'npm install' then 'node db/seed.js' then 'npm start'."
+}
